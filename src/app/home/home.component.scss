@@ -1,0 +1,30 @@
+* {
+  display: flex;
+  box-sizing: border-box;
+}
+.page {
+  flex-direction: column;
+  height: 100%;
+  .header {
+    background-color: #ccc;
+    height: 2rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .content {
+    width: 100%;
+    height: calc(100% - 2rem);
+    flex-direction: row;
+    .margin {
+      width: 50px;
+      writing-mode: vertical-rl;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .main {
+      flex: 1 100%;
+      background-color: #eee;
+    }
+  }
+}
