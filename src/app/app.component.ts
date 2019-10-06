@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { TextDialogComponent } from './text-dialog/text-dialog.component';
+import { isNumber } from 'util';
 
 @Component({
   selector: 'app-root',
@@ -21,104 +22,94 @@ export class AppComponent implements OnInit, AfterViewInit {
   marginLeftHeight = 0;
   marginRightWidth = 0;
   marginRightHeight = 0;
-  breakpoints = {
-    sm: 600,
-    md: 960,
-    lg: 1280,
-    xl: 1920
-  };
   defaultSettings = {
-    sizes: {
-      '.header': {
-        height: { xs: '3rem', sm: null, md: null, lg: null, xl: null },
-        padding: { xs: '0.5rem', sm: null, md: null, lg: null, xl: null }
-      },
-      '.margin': {
-        width: { xs: '1rem', sm: null, md: null, lg: null, xl: null }
-      },
-      '.main': {
-        padding: { xs: '1rem', sm: null, md: null, lg: null, xl: null }
-      },
-      h1: {
-        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
-        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'font-size': { xs: '2rem', sm: null, md: null, lg: null, xl: null },
-        'line-height': { xs: '2rem', sm: null, md: null, lg: null, xl: null },
-        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-      },
-      h2: {
-        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
-        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'font-size': { xs: '1.5rem', sm: null, md: null, lg: null, xl: null },
-        'line-height': { xs: '1.5rem', sm: null, md: null, lg: null, xl: null },
-        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-      },
-      h3: {
-        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
-        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'font-size': { xs: '1.17rem', sm: null, md: null, lg: null, xl: null },
-        'line-height': { xs: '1.17rem', sm: null, md: null, lg: null, xl: null },
-        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-      },
-      h4: {
-        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
-        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'font-size': { xs: '1rem', sm: null, md: null, lg: null, xl: null },
-        'line-height': { xs: '1rem', sm: null, md: null, lg: null, xl: null },
-        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-      },
-      h5: {
-        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
-        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'font-size': { xs: '0.83rem', sm: null, md: null, lg: null, xl: null },
-        'line-height': { xs: '0.83rem', sm: null, md: null, lg: null, xl: null },
-        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-      },
-      h6: {
-        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
-        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'font-size': { xs: '0.67rem', sm: null, md: null, lg: null, xl: null },
-        'line-height': { xs: '0.67rem', sm: null, md: null, lg: null, xl: null },
-        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-      },
-      p: {
-        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
-        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-        'font-size': { xs: '1rem', sm: null, md: null, lg: null, xl: null },
-        'line-height': { xs: '1rem', sm: null, md: null, lg: null, xl: null },
-        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
-      }
-    },
     layout: {
+      responsive: {
+        breakpoints: { xs: 600, sm: 960, md: 1280, lg: 1920, xl: Infinity }
+      },
       content: {
-        xs: ['margin', '1rem'],
-        sm: null,
-        md: null,
-        lg: null,
-        xl: null
+        margin: { xs: 1 },
+        main: { xs: 'auto' }
       },
       grid: {
-        columns: { xs: 1, sm: 2, md: 3, lg: 4, xl: null },
-        gap: { xs: '1rem', sm: null, md: null, lg: null, xl: null }
+        columns: { xs: 1, sm: 2, md: 3, lg: 4 },
+        gap: { xs: 1 }
       }
     },
-    grid: {
-      columns: { xs: 1, sm: 2, md: 3, lg: 4, xl: null },
-      gap: { xs: '1rem', sm: null, md: null, lg: null, xl: null }
+    sizes: {
+      '.header': {
+        height: { xs: 3 },
+        padding: { xs: 0.5 }
+      },
+      '.margin': {
+        width: { xs: 1 }
+      },
+      '.main': {
+        padding: { xs: 1 }
+      },
+      h1: {
+        'margin-top': { xs: 0 },
+        'margin-bottom': { xs: 0.3 },
+        'padding-top': { xs: 0 },
+        'padding-bottom': { xs: 0 },
+        'font-size': { xs: 2 },
+        'line-height': { xs: 2 },
+        'letter-spacing': { xs: 0 },
+      },
+      h2: {
+        'margin-top': { xs: 0 },
+        'margin-bottom': { xs: 0.3 },
+        'padding-top': { xs: 0 },
+        'padding-bottom': { xs: 0 },
+        'font-size': { xs: 1.5 },
+        'line-height': { xs: 1.5 },
+        'letter-spacing': { xs: 0 },
+      },
+      h3: {
+        'margin-top': { xs: 0 },
+        'margin-bottom': { xs: 0.3 },
+        'padding-top': { xs: 0 },
+        'padding-bottom': { xs: 0 },
+        'font-size': { xs: 1.17 },
+        'line-height': { xs: 1.17 },
+        'letter-spacing': { xs: 0 },
+      },
+      h4: {
+        'margin-top': { xs: 0 },
+        'margin-bottom': { xs: 0.3 },
+        'padding-top': { xs: 0 },
+        'padding-bottom': { xs: 0 },
+        'font-size': { xs: 1 },
+        'line-height': { xs: 1 },
+        'letter-spacing': { xs: 0 },
+      },
+      h5: {
+        'margin-top': { xs: 0 },
+        'margin-bottom': { xs: 0.3 },
+        'padding-top': { xs: 0 },
+        'padding-bottom': { xs: 0 },
+        'font-size': { xs: 0.83 },
+        'line-height': { xs: 0.83 },
+        'letter-spacing': { xs: 0 },
+      },
+      h6: {
+        'margin-top': { xs: 0 },
+        'margin-bottom': { xs: 0.3 },
+        'padding-top': { xs: 0 },
+        'padding-bottom': { xs: 0 },
+        'font-size': { xs: 0.67 },
+        'line-height': { xs: 0.67 },
+        'letter-spacing': { xs: 0 },
+      },
+      p: {
+        'margin-top': { xs: 0 },
+        'margin-bottom': { xs: 0.3 },
+        'padding-top': { xs: 0 },
+        'padding-bottom': { xs: 0 },
+        'font-size': { xs: 1 },
+        'line-height': { xs: 1 },
+        'letter-spacing': { xs: 0 },
+      }
     }
   };
   settings = this.defaultSettings;
@@ -139,71 +130,41 @@ export class AppComponent implements OnInit, AfterViewInit {
   applySettings(size: string) {
     for (const el of Object.keys(this.settings.sizes)) {
       for (const prop of Object.keys(this.settings.sizes[el])) {
-        this.applySetting(size, el, prop, el, prop);
+        this.applySetting(el, prop, this.getSizeVal(size, this.settings.sizes[el][prop]));
       }
     }
-    this.applySetting(size, '.content', 'top', '.header', 'height');
-    this.applySetting(size, '.main', 'left', '.margin', 'width');
-    this.applySetting(size, '.main', 'right', '.margin', 'width');
-    const gap = this.getVal(size, 'grid', 'gap');
-    this.applySetting(size, '.grid div', 'margin-right', gap);
-    this.applySetting(size, '.grid div', 'margin-bottom', gap);
-    this.applySetting(size, '.grid', 'margin-right', '-' + gap);
-    this.applySetting(size, '.grid div', 'width',
-      'calc(' + 100 / this.getVal(size, 'grid', 'columns') + '% - ' + gap + ')');
+    this.applySetting('.content', 'top', this.getSizeVal(size, this.settings.sizes['.header'].height));
+    this.applySetting('.main', 'left', this.getSizeVal(size, this.settings.sizes['.margin'].width));
+    this.applySetting('.main', 'right', this.getSizeVal(size, this.settings.sizes['.margin'].width));
+    const gap = this.getSizeVal(size, this.settings.layout.grid.gap);
+    this.applySetting('.grid div', 'margin-right', gap);
+    this.applySetting('.grid div', 'margin-bottom', gap);
+    this.applySetting('.grid', 'margin-right', '-' + gap);
+    this.applySetting('.grid div', 'width',
+      'calc(' + 100 / this.getVal(size, this.settings.layout.grid.columns) + '% - ' + gap + ')');
   }
 
-  applySetting(size: string, selector: string, cssProp: string, setting: string, settingProp: string = null) {
+  applySetting(selector: string, prop: string, val: string) {
     const elems = document.querySelectorAll(selector);
     for (const el of Object.keys(elems)) {
-      if (settingProp) {
-        this.renderer.setStyle(elems[el], cssProp, this.getSizeVal(size, setting, settingProp));
-      } else {
-        this.renderer.setStyle(elems[el], cssProp, setting);
+      this.renderer.setStyle(elems[el], prop, val);
+    }
+  }
+
+  getSizeVal(size: string, el: any) {
+    const val = this.getVal(size, el);
+    return isNumber(val) ? val + 'rem' : val;
+  }
+
+  getVal(size: string, el: any) {
+    const breakpoints = Object.keys(this.settings.layout.responsive.breakpoints);
+    breakpoints.splice(breakpoints.indexOf(size) + 1);
+    for (const breakpoint of breakpoints.reverse()) {
+      if (el[breakpoint] != null) {
+        return el[breakpoint];
       }
     }
-  }
-
-  getSizeVal(size: string, setting: string, settingProp: string) {
-    return this.getVal(size, setting, settingProp, 'sizes');
-  }
-
-  getVal(size: string, setting: string, settingProp: string, settingGroup: string = null) {
-    const group = settingGroup ? this.settings[settingGroup] : this.settings;
-    switch (size) {
-      case 'xl':
-        if (group[setting][settingProp].xl !== null) {
-          return group[setting][settingProp].xl;
-        } else if (group[setting][settingProp].lg !== null) {
-          return group[setting][settingProp].lg;
-        } else if (group[setting][settingProp].md !== null) {
-          return group[setting][settingProp].md;
-        } else if (group[setting][settingProp].sm !== null) {
-          return group[setting][settingProp].sm;
-        }
-        break;
-      case 'lg':
-        if (group[setting][settingProp].lg !== null) {
-          return group[setting][settingProp].lg;
-        } else if (group[setting][settingProp].md !== null) {
-          return group[setting][settingProp].md;
-        } else if (group[setting][settingProp].sm !== null) {
-          return group[setting][settingProp].sm;
-        }
-        break;
-      case 'md':
-        if (group[setting][settingProp].md !== null) {
-          return group[setting][settingProp].md;
-        } else if (group[setting][settingProp].sm !== null) {
-          return group[setting][settingProp].sm;
-        }
-        break;
-      case 'sm':
-        if (group[setting][settingProp].sm !== null) {
-          return group[setting][settingProp].sm;
-        }
-    }
-    return group[setting][settingProp].xs;
+    throw new Error('Base value (XS) is required for all settings!');
   }
 
   onResize() {
@@ -223,16 +184,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   getSize() {
     const windowWidth = document.querySelector('.page').clientWidth;
-    if (windowWidth < this.breakpoints.sm) {
-      return 'xs';
-    } else if (this.windowWidth < this.breakpoints.md) {
-      return 'sm';
-    } else if (this.windowWidth < this.breakpoints.lg) {
-      return 'md';
-    } else if (this.windowWidth < this.breakpoints.xl) {
-      return 'lg';
-    } else {
-      return 'xl';
+    for (const breakpoint of Object.keys(this.settings.layout.responsive.breakpoints)) {
+      if (windowWidth < this.settings.layout.responsive.breakpoints[breakpoint]) {
+        return breakpoint;
+      }
     }
   }
 
@@ -267,7 +222,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
-  copySettings() {
+  exportSettings() {
     const el = document.createElement('textarea');
     el.style.position = 'fixed';
     el.style.left = '0';
