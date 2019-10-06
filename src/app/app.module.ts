@@ -6,12 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatButtonModule, MatSnackBarModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { TextDialogComponent } from './text-dialog/text-dialog.component';
+import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConfirmationDialogComponent,
-    TextDialogComponent
+    TextDialogComponent,
+    InfoDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +27,8 @@ import { TextDialogComponent } from './text-dialog/text-dialog.component';
   ],
   entryComponents: [
     ConfirmationDialogComponent,
-    TextDialogComponent
+    TextDialogComponent,
+    InfoDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

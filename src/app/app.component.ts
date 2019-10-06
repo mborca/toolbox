@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { TextDialogComponent } from './text-dialog/text-dialog.component';
+import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import { isNumber } from 'util';
 
 @Component({
@@ -22,31 +23,28 @@ export class AppComponent implements OnInit, AfterViewInit {
   marginLeftHeight = 0;
   marginRightWidth = 0;
   marginRightHeight = 0;
+  defaultUnit = 'rem';
   defaultSettings = {
     layout: {
       responsive: {
         breakpoints: { xs: 600, sm: 960, md: 1280, lg: 1920, xl: Infinity }
       },
+      header: {
+        height: { xs: 3 },
+        paddingHorizontal: { xs: 1 },
+        paddingVertical: { xs: 0.5 }
+      },
       content: {
-        margin: { xs: 1 },
-        main: { xs: 'auto' }
+        width: { xs: [ 'flexible', 1 ] },
+        paddingHorizontal: { xs: 1 },
+        paddingVertical: { xs: 0 }
       },
       grid: {
         columns: { xs: 1, sm: 2, md: 3, lg: 4 },
         gap: { xs: 1 }
       }
     },
-    sizes: {
-      '.header': {
-        height: { xs: 3 },
-        padding: { xs: 0.5 }
-      },
-      '.margin': {
-        width: { xs: 1 }
-      },
-      '.main': {
-        padding: { xs: 1 }
-      },
+    typography: {
       h1: {
         'margin-top': { xs: 0 },
         'margin-bottom': { xs: 0.3 },
@@ -128,14 +126,37 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   applySettings(size: string) {
-    for (const el of Object.keys(this.settings.sizes)) {
-      for (const prop of Object.keys(this.settings.sizes[el])) {
-        this.applySetting(el, prop, this.getSizeVal(size, this.settings.sizes[el][prop]));
+    // Typography
+    for (const el of Object.keys(this.settings.typography)) {
+      for (const prop of Object.keys(this.settings.typography[el])) {
+        this.applySetting(el, prop, this.getSizeVal(size, this.settings.typography[el][prop]));
       }
     }
-    this.applySetting('.content', 'top', this.getSizeVal(size, this.settings.sizes['.header'].height));
-    this.applySetting('.main', 'left', this.getSizeVal(size, this.settings.sizes['.margin'].width));
-    this.applySetting('.main', 'right', this.getSizeVal(size, this.settings.sizes['.margin'].width));
+    // Header
+    this.applySetting('.header', 'height', this.getSizeVal(size, this.settings.layout.header.height));
+    this.applySetting('.content', 'top', this.getSizeVal(size, this.settings.layout.header.height));
+    // Spacing
+    this.applySetting('.header', 'padding-top', this.getSizeVal(size, this.settings.layout.header.paddingVertical));
+    this.applySetting('.header', 'padding-bottom', this.getSizeVal(size, this.settings.layout.header.paddingVertical));
+    this.applySetting('.header', 'padding-left', this.getSizeVal(size, this.settings.layout.header.paddingHorizontal));
+    this.applySetting('.header', 'padding-right', this.getSizeVal(size, this.settings.layout.header.paddingHorizontal));
+    this.applySetting('.main', 'padding-top', this.getSizeVal(size, this.settings.layout.content.paddingVertical));
+    this.applySetting('.main', 'padding-bottom', this.getSizeVal(size, this.settings.layout.content.paddingVertical));
+    this.applySetting('.main', 'padding-left', this.getSizeVal(size, this.settings.layout.content.paddingHorizontal));
+    this.applySetting('.main', 'padding-right', this.getSizeVal(size, this.settings.layout.content.paddingHorizontal));
+    // Layout
+    const width = this.getVal(size, this.settings.layout.content.width);
+    const mode = width[0];
+    let val = isNumber(width[1]) ? width[1] + this.defaultUnit : width[1];
+    if (mode === 'fixed') {
+      val = 'calc(50% - ' + val + ' / 2)';
+    } else if (mode !== 'flexible') {
+      throw new Error('Unsupported layout mode: ' + mode);
+    }
+    this.applySetting('.margin', 'width', val);
+    this.applySetting('.main', 'left', val);
+    this.applySetting('.main', 'right', val);
+    // Grid
     const gap = this.getSizeVal(size, this.settings.layout.grid.gap);
     this.applySetting('.grid div', 'margin-right', gap);
     this.applySetting('.grid div', 'margin-bottom', gap);
@@ -153,7 +174,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   getSizeVal(size: string, el: any) {
     const val = this.getVal(size, el);
-    return isNumber(val) ? val + 'rem' : val;
+    return isNumber(val) ? val + this.defaultUnit : val;
   }
 
   getVal(size: string, el: any) {
@@ -197,7 +218,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       height: '500px',
       data: {
         title,
-        settings: this.settings.sizes[el]
+        settings: this.settings.typography[el]
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -214,7 +235,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 'reset') {
+      if (result === 'ok') {
         window.localStorage.removeItem('settings');
         this.settings = this.defaultSettings;
         this.applySettings(this.getSize());
@@ -243,6 +264,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     window.localStorage.setItem('settings', JSON.stringify(this.settings));
     this.snackBar.open('Setting saved!', 'Done', {
       duration: 2000
+    });
+  }
+
+  info() {
+    this.dialog.open(InfoDialogComponent, {
+      width: '300px',
+      height: '500px',
+      data: {
+        title: 'RESPONSIVE'
+      }
     });
   }
 }
