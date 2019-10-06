@@ -1,1 +1,58 @@
-<router-outlet></router-outlet>
+<div class="page" (window:load)="onResize()" (window:resize)="onResize()">
+  <div class="header">
+    <div class="header-content">
+      <div class="title">
+        RESPONSIVE
+      </div>
+      <div>
+        <a>Header</a>
+        ({{headerWidth}}, {{headerHeight}})
+      </div>
+      <div class="size">
+        {{windowSize}}
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="margin left">
+      <a>Margin Left</a>&nbsp;({{marginLeftWidth}}, {{marginLeftHeight}})
+    </div>
+    <div class="main">
+      <div class="main-content">
+        <div class="center">
+          <a>Content</a>
+          ({{contentWidth}}, {{contentHeight}})
+        </div>
+        <h1><a>H1</a> heading</h1>
+        <h2><a>H2</a> heading</h2>
+        <h3><a>H3</a> heading</h3>
+        <h4><a>H4</a> heading</h4>
+        <h5><a>H5</a> heading</h5>
+        <h6><a>H6</a> heading</h6>
+        <p><a>P</a> paragraph</p>
+        <div class="center">
+          <a>Grid</a>
+        </div>
+        <div class="grid">
+          <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]">Card {{i}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="margin right">
+      <a>Margin Right</a>&nbsp;({{marginRightWidth}}, {{marginRightHeight}})
+    </div>
+  </div>
+  <div class="footer">
+    <div class="title">
+      Window
+      ({{windowWidth}}, {{windowHeight}})
+      <a href="https://github.com/mborca/toolbox-responsive" target="_blank">code</a>
+    </div>
+    <div class="actions">
+      Settings:
+      <a (click)="resetSettings()">Reset</a>
+      <a (click)="exportSettings()">Export</a>
+      <a (click)="saveSettings()">Save</a>
+    </div>
+  </div>
+</div>
