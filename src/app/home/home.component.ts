@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       'letter-spacing': { xs: '0rem' },
     },
     grid: {
-      columns: { xs: 4 },
+      columns: { xs: 1, sm: 2, md: 3, lg: 4 },
       gap: { xs: '1rem' }
     }
   };
@@ -114,7 +114,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settings = window.localStorage.getItem('settings')
       ? JSON.parse(window.localStorage.getItem('settings'))
       : this.defaultSettings;
-    this.applySettings('xs');
+    this.applySettings(this.getSize());
   }
 
   resetSettings() {
@@ -125,24 +125,66 @@ export class HomeComponent implements OnInit, AfterViewInit {
   applySettings(size: string) {
     for (const el of Object.keys(this.settings)) {
       for (const prop of Object.keys(this.settings[el])) {
-        const val = this.settings[el][prop][size];
-        const elems = document.querySelectorAll(el);
-        for (const elem of Object.keys(elems) ) {
-          this.renderer.setStyle(elems[elem], prop, val);
-        }
+        this.applySetting(size, el, prop, el, prop);
       }
     }
-    this.renderer.setStyle(document.querySelector('.content'), 'top', this.settings['.header'].height[size]);
-    this.renderer.setStyle(document.querySelector('.main'), 'left', this.settings['.margin'].width[size]);
-    this.renderer.setStyle(document.querySelector('.main'), 'right', this.settings['.margin'].width[size]);
-    this.renderer.setStyle(document.querySelector('.grid'), 'margin-right', '-' + this.settings.grid.gap[size]);
-    const cellWidth = 'calc(' + 100 / this.settings.grid.columns[size] + '% - ' + this.settings.grid.gap[size] + ')';
-    const cells = document.querySelectorAll('.grid div');
-    for (const cell of Object.keys(cells)) {
-      this.renderer.setStyle(cells[cell], 'margin-right', this.settings.grid.gap[size]);
-      this.renderer.setStyle(cells[cell], 'margin-bottom', this.settings.grid.gap[size]);
-      this.renderer.setStyle(cells[cell], 'width', cellWidth);
+    this.applySetting(size, '.content', 'top', '.header', 'height');
+    this.applySetting(size, '.main', 'left', '.margin', 'width');
+    this.applySetting(size, '.main', 'right', '.margin', 'width');
+    this.applySetting(size, '.grid div', 'margin-right', 'grid', 'gap');
+    this.applySetting(size, '.grid div', 'margin-bottom', 'grid', 'gap');
+    this.applySetting(size, '.grid', 'margin-right', '-' + this.getSizeVal(size, 'grid', 'gap'));
+    const cellWidth = 'calc(' + 100 / this.settings.grid.columns.xs + '% - ' + this.settings.grid.gap.xs + ')';
+    this.applySetting(size, '.grid div', 'width',
+      'calc(' + 100 / this.getSizeVal(size, 'grid', 'columns') + '% - ' + this.getSizeVal(size, 'grid', 'gap') + ')');
+  }
+
+  applySetting(size: string, selector: string, cssProp: string, setting: string, settingProp: string = null) {
+    const elems = document.querySelectorAll(selector);
+    for (const el of Object.keys(elems)) {
+      if (settingProp) {
+        this.renderer.setStyle(elems[el], cssProp, this.getSizeVal(size, setting, settingProp));
+      } else {
+        this.renderer.setStyle(elems[el], cssProp, setting);
+      }
     }
+  }
+
+  getSizeVal(size: string, setting: string, settingProp: string) {
+    switch (size) {
+      case 'xl':
+        if (this.settings[setting][settingProp].xl) {
+          return this.settings[setting][settingProp].xl;
+        } else if (this.settings[setting][settingProp].lg) {
+          return this.settings[setting][settingProp].lg;
+        } else if (this.settings[setting][settingProp].md) {
+          return this.settings[setting][settingProp].md;
+        } else if (this.settings[setting][settingProp].sm) {
+          return this.settings[setting][settingProp].sm;
+        }
+        break;
+      case 'lg':
+        if (this.settings[setting][settingProp].lg) {
+          return this.settings[setting][settingProp].lg;
+        } else if (this.settings[setting][settingProp].md) {
+          return this.settings[setting][settingProp].md;
+        } else if (this.settings[setting][settingProp].sm) {
+          return this.settings[setting][settingProp].sm;
+        }
+        break;
+      case 'md':
+        if (this.settings[setting][settingProp].md) {
+          return this.settings[setting][settingProp].md;
+        } else if (this.settings[setting][settingProp].sm) {
+          return this.settings[setting][settingProp].sm;
+        }
+        break;
+      case 'sm':
+        if (this.settings[setting][settingProp].sm) {
+          return this.settings[setting][settingProp].sm;
+        }
+    }
+    return this.settings[setting][settingProp].xs;
   }
 
   exportSettings() {
@@ -176,7 +218,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.marginRightWidth = document.querySelector('.margin.right').clientWidth;
     this.marginRightHeight = document.querySelector('.margin.right').clientHeight;
     this.windowSize = this.getSize();
-    this.applySettings('xs');
+    this.applySettings(this.windowSize);
   }
 
   getSize() {
