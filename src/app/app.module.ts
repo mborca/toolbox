@@ -24,7 +24,8 @@ import { TextDialogComponent } from './text-dialog/text-dialog.component';
     MatInputModule
   ],
   entryComponents: [
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    TextDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

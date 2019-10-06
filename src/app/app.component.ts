@@ -28,82 +28,97 @@ export class AppComponent implements OnInit, AfterViewInit {
     xl: 1920
   };
   defaultSettings = {
-    '.header': {
-      height: { xs: '3rem' },
-      padding: { xs: '0.5rem' }
+    sizes: {
+      '.header': {
+        height: { xs: '3rem', sm: null, md: null, lg: null, xl: null },
+        padding: { xs: '0.5rem', sm: null, md: null, lg: null, xl: null }
+      },
+      '.margin': {
+        width: { xs: '1rem', sm: null, md: null, lg: null, xl: null }
+      },
+      '.main': {
+        padding: { xs: '1rem', sm: null, md: null, lg: null, xl: null }
+      },
+      h1: {
+        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
+        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'font-size': { xs: '2rem', sm: null, md: null, lg: null, xl: null },
+        'line-height': { xs: '2rem', sm: null, md: null, lg: null, xl: null },
+        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+      },
+      h2: {
+        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
+        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'font-size': { xs: '1.5rem', sm: null, md: null, lg: null, xl: null },
+        'line-height': { xs: '1.5rem', sm: null, md: null, lg: null, xl: null },
+        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+      },
+      h3: {
+        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
+        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'font-size': { xs: '1.17rem', sm: null, md: null, lg: null, xl: null },
+        'line-height': { xs: '1.17rem', sm: null, md: null, lg: null, xl: null },
+        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+      },
+      h4: {
+        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
+        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'font-size': { xs: '1rem', sm: null, md: null, lg: null, xl: null },
+        'line-height': { xs: '1rem', sm: null, md: null, lg: null, xl: null },
+        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+      },
+      h5: {
+        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
+        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'font-size': { xs: '0.83rem', sm: null, md: null, lg: null, xl: null },
+        'line-height': { xs: '0.83rem', sm: null, md: null, lg: null, xl: null },
+        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+      },
+      h6: {
+        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
+        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'font-size': { xs: '0.67rem', sm: null, md: null, lg: null, xl: null },
+        'line-height': { xs: '0.67rem', sm: null, md: null, lg: null, xl: null },
+        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+      },
+      p: {
+        'margin-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'margin-bottom': { xs: '0.3rem', sm: null, md: null, lg: null, xl: null },
+        'padding-top': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'padding-bottom': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+        'font-size': { xs: '1rem', sm: null, md: null, lg: null, xl: null },
+        'line-height': { xs: '1rem', sm: null, md: null, lg: null, xl: null },
+        'letter-spacing': { xs: '0rem', sm: null, md: null, lg: null, xl: null },
+      }
     },
-    '.margin': {
-      width: { xs: '1rem' }
-    },
-    '.main': {
-      padding: { xs: '1rem' }
-    },
-    h1: {
-      'margin-top': { xs: '0rem' },
-      'margin-bottom': { xs: '0.3rem' },
-      'padding-top': { xs: '0rem' },
-      'padding-bottom': { xs: '0rem' },
-      'font-size': { xs: '2rem' },
-      'line-height': { xs: '2rem' },
-      'letter-spacing': { xs: '0rem' },
-    },
-    h2: {
-      'margin-top': { xs: '0rem' },
-      'margin-bottom': { xs: '0.3rem' },
-      'padding-top': { xs: '0rem' },
-      'padding-bottom': { xs: '0rem' },
-      'font-size': { xs: '1.5rem' },
-      'line-height': { xs: '1.5rem' },
-      'letter-spacing': { xs: '0rem' },
-    },
-    h3: {
-      'margin-top': { xs: '0rem' },
-      'margin-bottom': { xs: '0.3rem' },
-      'padding-top': { xs: '0rem' },
-      'padding-bottom': { xs: '0rem' },
-      'font-size': { xs: '1.17rem' },
-      'line-height': { xs: '1.17rem' },
-      'letter-spacing': { xs: '0rem' },
-    },
-    h4: {
-      'margin-top': { xs: '0rem' },
-      'margin-bottom': { xs: '0.3rem' },
-      'padding-top': { xs: '0rem' },
-      'padding-bottom': { xs: '0rem' },
-      'font-size': { xs: '1rem' },
-      'line-height': { xs: '1rem' },
-      'letter-spacing': { xs: '0rem' },
-    },
-    h5: {
-      'margin-top': { xs: '0rem' },
-      'margin-bottom': { xs: '0.3rem' },
-      'padding-top': { xs: '0rem' },
-      'padding-bottom': { xs: '0rem' },
-      'font-size': { xs: '0.83rem' },
-      'line-height': { xs: '0.83rem' },
-      'letter-spacing': { xs: '0rem' },
-    },
-    h6: {
-      'margin-top': { xs: '0rem' },
-      'margin-bottom': { xs: '0.3rem' },
-      'padding-top': { xs: '0rem' },
-      'padding-bottom': { xs: '0rem' },
-      'font-size': { xs: '0.67rem' },
-      'line-height': { xs: '0.67rem' },
-      'letter-spacing': { xs: '0rem' },
-    },
-    p: {
-      'margin-top': { xs: '0rem' },
-      'margin-bottom': { xs: '0.3rem' },
-      'padding-top': { xs: '0rem' },
-      'padding-bottom': { xs: '0rem' },
-      'font-size': { xs: '1rem' },
-      'line-height': { xs: '1rem' },
-      'letter-spacing': { xs: '0rem' },
+    layout: {
+      content: {
+        xs: ['margin', '1rem'],
+        sm: null,
+        md: null,
+        lg: null,
+        xl: null
+      },
+      grid: {
+        columns: { xs: 1, sm: 2, md: 3, lg: 4, xl: null },
+        gap: { xs: '1rem', sm: null, md: null, lg: null, xl: null }
+      }
     },
     grid: {
-      columns: { xs: 1, sm: 2, md: 3, lg: 4 },
-      gap: { xs: '1rem' }
+      columns: { xs: 1, sm: 2, md: 3, lg: 4, xl: null },
+      gap: { xs: '1rem', sm: null, md: null, lg: null, xl: null }
     }
   };
   settings = this.defaultSettings;
@@ -122,20 +137,20 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   applySettings(size: string) {
-    for (const el of Object.keys(this.settings)) {
-      for (const prop of Object.keys(this.settings[el])) {
+    for (const el of Object.keys(this.settings.sizes)) {
+      for (const prop of Object.keys(this.settings.sizes[el])) {
         this.applySetting(size, el, prop, el, prop);
       }
     }
     this.applySetting(size, '.content', 'top', '.header', 'height');
     this.applySetting(size, '.main', 'left', '.margin', 'width');
     this.applySetting(size, '.main', 'right', '.margin', 'width');
-    this.applySetting(size, '.grid div', 'margin-right', 'grid', 'gap');
-    this.applySetting(size, '.grid div', 'margin-bottom', 'grid', 'gap');
-    this.applySetting(size, '.grid', 'margin-right', '-' + this.getSizeVal(size, 'grid', 'gap'));
-    const cellWidth = 'calc(' + 100 / this.settings.grid.columns.xs + '% - ' + this.settings.grid.gap.xs + ')';
+    const gap = this.getVal(size, 'grid', 'gap');
+    this.applySetting(size, '.grid div', 'margin-right', gap);
+    this.applySetting(size, '.grid div', 'margin-bottom', gap);
+    this.applySetting(size, '.grid', 'margin-right', '-' + gap);
     this.applySetting(size, '.grid div', 'width',
-      'calc(' + 100 / this.getSizeVal(size, 'grid', 'columns') + '% - ' + this.getSizeVal(size, 'grid', 'gap') + ')');
+      'calc(' + 100 / this.getVal(size, 'grid', 'columns') + '% - ' + gap + ')');
   }
 
   applySetting(size: string, selector: string, cssProp: string, setting: string, settingProp: string = null) {
@@ -150,51 +165,45 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   getSizeVal(size: string, setting: string, settingProp: string) {
+    return this.getVal(size, setting, settingProp, 'sizes');
+  }
+
+  getVal(size: string, setting: string, settingProp: string, settingGroup: string = null) {
+    const group = settingGroup ? this.settings[settingGroup] : this.settings;
     switch (size) {
       case 'xl':
-        if (this.settings[setting][settingProp].xl) {
-          return this.settings[setting][settingProp].xl;
-        } else if (this.settings[setting][settingProp].lg) {
-          return this.settings[setting][settingProp].lg;
-        } else if (this.settings[setting][settingProp].md) {
-          return this.settings[setting][settingProp].md;
-        } else if (this.settings[setting][settingProp].sm) {
-          return this.settings[setting][settingProp].sm;
+        if (group[setting][settingProp].xl !== null) {
+          return group[setting][settingProp].xl;
+        } else if (group[setting][settingProp].lg !== null) {
+          return group[setting][settingProp].lg;
+        } else if (group[setting][settingProp].md !== null) {
+          return group[setting][settingProp].md;
+        } else if (group[setting][settingProp].sm !== null) {
+          return group[setting][settingProp].sm;
         }
         break;
       case 'lg':
-        if (this.settings[setting][settingProp].lg) {
-          return this.settings[setting][settingProp].lg;
-        } else if (this.settings[setting][settingProp].md) {
-          return this.settings[setting][settingProp].md;
-        } else if (this.settings[setting][settingProp].sm) {
-          return this.settings[setting][settingProp].sm;
+        if (group[setting][settingProp].lg !== null) {
+          return group[setting][settingProp].lg;
+        } else if (group[setting][settingProp].md !== null) {
+          return group[setting][settingProp].md;
+        } else if (group[setting][settingProp].sm !== null) {
+          return group[setting][settingProp].sm;
         }
         break;
       case 'md':
-        if (this.settings[setting][settingProp].md) {
-          return this.settings[setting][settingProp].md;
-        } else if (this.settings[setting][settingProp].sm) {
-          return this.settings[setting][settingProp].sm;
+        if (group[setting][settingProp].md !== null) {
+          return group[setting][settingProp].md;
+        } else if (group[setting][settingProp].sm !== null) {
+          return group[setting][settingProp].sm;
         }
         break;
       case 'sm':
-        if (this.settings[setting][settingProp].sm) {
-          return this.settings[setting][settingProp].sm;
+        if (group[setting][settingProp].sm !== null) {
+          return group[setting][settingProp].sm;
         }
     }
-    return this.settings[setting][settingProp].xs;
-  }
-
-  getStyles(el: string) {
-    let ret = '';
-    for (const prop of Object.keys(this.settings[el])) {
-      if (ret !== '') {
-        ret += ', ';
-      }
-      ret += prop + ': ' + this.settings[el][prop].xs;
-    }
-    return ret;
+    return group[setting][settingProp].xs;
   }
 
   onResize() {
@@ -228,12 +237,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   setTextSettings(title: string, el: string) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    const dialogRef = this.dialog.open(TextDialogComponent, {
       width: '500px',
       height: '500px',
       data: {
         title,
-        settings: null
+        settings: this.settings.sizes[el]
       }
     });
     dialogRef.afterClosed().subscribe(result => {

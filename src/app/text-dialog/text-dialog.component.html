@@ -1,8 +1,9 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
+  <mat-label>Margin Top</mat-label>
   <mat-form-field>
-    <mat-label>Margin Top</mat-label>
-    <input matInput placeholder="">
+    <mat-label>XS</mat-label>
+    <input matInput [(ngModel)]="data.settings['margin-top'].xs" placeholder="">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
