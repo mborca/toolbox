@@ -23,7 +23,7 @@
           <a>Content</a>
           ({{contentWidth}}, {{contentHeight}})
         </div>
-        <h1><a>H1</a> heading</h1>
+        <h1><a (click)="setTextSettings('H1', 'h1')">H1</a> heading</h1>
         <h2><a>H2</a> heading</h2>
         <h3><a>H3</a> heading</h3>
         <h4><a>H4</a> heading</h4>
@@ -51,7 +51,7 @@
     <div class="actions">
       Settings:
       <a (click)="resetSettings()">Reset</a>
-      <a (click)="exportSettings()">Export</a>
+      <a (click)="copySettings()">Copy</a>
       <a (click)="saveSettings()">Save</a>
     </div>
   </div>

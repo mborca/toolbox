@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Margin Top</mat-label>
+    <input matInput placeholder="">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="accent" [mat-dialog-close]="data.settings" cdkFocusInitial>Save</button>
+</div>

@@ -1,3 +1,28 @@
+@import '~@angular/material/theming';
+@include mat-core();
+$primary: (
+  100: #ccc,
+  500: #999,
+  700: #333,
+  contrast: (
+    100: black,
+    500: black,
+    700: white
+  )
+);
+$accent: (
+  100: rgb(236, 122, 122),
+  500: #f00,
+  700: rgb(141, 5, 5),
+  contrast: (
+    100: black,
+    500: white,
+    700: white
+  )
+);
+$md-theme: mat-light-theme(mat-palette($primary), mat-palette($accent));
+@include angular-material-theme($md-theme);
+
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }

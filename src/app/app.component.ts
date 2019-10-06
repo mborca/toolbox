@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { TextDialogComponent } from './text-dialog/text-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -106,7 +108,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   };
   settings = this.defaultSettings;
 
-  constructor(private renderer: Renderer2, private dialog: MatDialog) {
+  constructor(private renderer: Renderer2, private dialog: MatDialog, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -117,25 +119,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       ? JSON.parse(window.localStorage.getItem('settings'))
       : this.defaultSettings;
     this.applySettings(this.getSize());
-  }
-
-  resetSettings() {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '300px',
-      height: '200px',
-      data: {
-        title: 'Reset Settings',
-        text: 'Changes will be lost.',
-        action: null
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 'reset') {
-        window.localStorage.removeItem('settings');
-        this.settings = this.defaultSettings;
-        this.applySettings(this.getSize());
-      }
-    });
   }
 
   applySettings(size: string) {
@@ -203,14 +186,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     return this.settings[setting][settingProp].xs;
   }
 
-  exportSettings() {
-
-  }
-
-  saveSettings() {
-    window.localStorage.setItem('settings', JSON.stringify(this.settings));
-  }
-
   getStyles(el: string) {
     let ret = '';
     for (const prop of Object.keys(this.settings[el])) {
@@ -250,5 +225,60 @@ export class AppComponent implements OnInit, AfterViewInit {
     } else {
       return 'xl';
     }
+  }
+
+  setTextSettings(title: string, el: string) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '500px',
+      height: '500px',
+      data: {
+        title,
+        settings: null
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
+
+  resetSettings() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '300px',
+      height: '200px',
+      data: {
+        title: 'Reset Settings',
+        text: 'Changes will be lost!'
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'reset') {
+        window.localStorage.removeItem('settings');
+        this.settings = this.defaultSettings;
+        this.applySettings(this.getSize());
+      }
+    });
+  }
+
+  copySettings() {
+    const el = document.createElement('textarea');
+    el.style.position = 'fixed';
+    el.style.left = '0';
+    el.style.top = '0';
+    el.style.opacity = '0';
+    el.value = JSON.stringify(this.settings);
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    this.snackBar.open('Settings copied to clipboard!', 'Done', {
+      duration: 2000
+    });
+  }
+
+  saveSettings() {
+    window.localStorage.setItem('settings', JSON.stringify(this.settings));
+    this.snackBar.open('Setting saved!', 'Done', {
+      duration: 2000
+    });
   }
 }
