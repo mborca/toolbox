@@ -28,4 +28,78 @@ export class ToolsService {
     }
     return clone; // return unlinked clone.
   }
+
+  lzwCompress(uncompressed: string) {
+    // Initialize dictionary
+    const dictionary = {};
+    for (let i = 0; i < 256; i++) {
+      dictionary[String.fromCharCode(i)] = i;
+    }
+    let word = '';
+    const result = [];
+    let dictSize = 256;
+    for (let i = 0, len = uncompressed.length; i < len; i++) {
+      const curChar = uncompressed[i];
+      const joinedWord = word + curChar;
+      // Do not use dictionary[joinedWord] because javascript objects 
+      // will return values for myObject['toString']
+      if (dictionary.hasOwnProperty(joinedWord)) {
+        word = joinedWord;
+      } else {
+        result.push(dictionary[word]);
+        // Add wc to the dictionary.
+        dictionary[joinedWord] = dictSize++;
+        word = curChar;
+      }
+    }
+    if (word !== '') {
+      result.push(dictionary[word]);
+    }
+    return result;
+  }
+
+  lzwUncompress(compressed: any) {
+    // Initialize Dictionary (inverse of compress)
+    const dictionary = {};
+    for (let i = 0; i < 256; i++) {
+      dictionary[i] = String.fromCharCode(i);
+    }
+    let word = String.fromCharCode(compressed[0]);
+    let result = word;
+    let entry = '';
+    let dictSize = 256;
+    for (let i = 1, len = compressed.length; i < len; i++) {
+      const curNumber = compressed[i];
+      if (dictionary[curNumber] !== undefined) {
+        entry = dictionary[curNumber];
+      } else {
+        if (curNumber === dictSize) {
+          entry = word + word[0];
+        } else {
+          throw new Error('Error in processing');
+        }
+      }
+      result += entry;
+      // Add word + entry[0] to dictionary
+      dictionary[dictSize++] = word + entry[0];
+      word = entry;
+    }
+    return result;
+  }
+
+  compress(input: object): string {
+    return input ? btoa(JSON.stringify(input)) : null;
+  }
+
+  uncompress(input: string): object {
+    return input ? JSON.parse(this.uncompressStr(input)) : null;
+  }
+
+  uncompressStr(input: string): string {
+    try {
+      return input ? atob(input) : null;
+    } catch {
+      return null;
+    }
+  }
 }

@@ -4,7 +4,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatButtonModule, MatSnackBarModule,
-         MatFormFieldModule, MatInputModule, MatSelectModule, MatSelect } from '@angular/material';
+         MatFormFieldModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import { TypographyDialogComponent } from './typography-dialog/typography-dialog.component';

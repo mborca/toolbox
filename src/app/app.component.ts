@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
@@ -12,7 +12,7 @@ import { ToolsService } from './services/tools.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   windowSize = '';
   windowWidth = 0;
   windowHeight = 0;
@@ -119,7 +119,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     }
   };
-  settings = this.tools.deepClone(this.defaultSettings);
+  settings = this.tools.deepClone(this.defaultSettings); // required for type checking
 
   constructor(
     private renderer: Renderer2,
@@ -129,13 +129,19 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
-    this.settings = window.localStorage.getItem('settings')
-      ? JSON.parse(window.localStorage.getItem('settings'))
-      : this.tools.deepClone(this.defaultSettings);
-    this.applySettings(this.getSize());
+    if (window.location.search) {
+      let settings = null;
+      settings = this.tools.uncompress(window.location.search.substr(1));
+      if (settings) {
+        window.localStorage.setItem('settings', this.tools.compress(settings));
+      }
+      window.location.href = window.location.origin;
+    } else {
+      this.settings = window.localStorage.getItem('settings')
+        ? this.tools.uncompress(window.localStorage.getItem('settings'))
+        : this.tools.deepClone(this.defaultSettings);
+      this.applySettings(this.getSize());
+    }
   }
 
   applySettings(size: string) {
@@ -176,6 +182,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.applySetting('.grid', 'margin-right', '-' + gap);
     this.applySetting('.grid div', 'width',
       'calc(' + 100 / this.getVal(size, this.settings.layout.grid.columns) + '% - ' + gap + ')');
+    // Persist settings
+    window.localStorage.setItem('settings', this.tools.compress(this.settings));
   }
 
   applySetting(selector: string, prop: string, val: string) {
@@ -236,32 +244,31 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
-        window.localStorage.removeItem('settings');
         this.settings = this.tools.deepClone(this.defaultSettings);
         this.applySettings(this.getSize());
       }
     });
   }
 
-  exportSettings() {
+  shareSettings() {
     const el = document.createElement('textarea');
     el.style.position = 'fixed';
     el.style.left = '0';
     el.style.top = '0';
     el.style.opacity = '0';
-    el.value = JSON.stringify(this.settings);
+    el.value = window.location.origin + '?' + this.tools.compress(this.settings);
     document.body.appendChild(el);
     el.focus();
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    this.snackBar.open('Settings copied to clipboard!', 'Done', {
+    this.snackBar.open('A link to this configuration was copied to the clipboard!', 'Done', {
       duration: 2000
     });
   }
 
   saveSettings() {
-    window.localStorage.setItem('settings', JSON.stringify(this.settings));
+    window.localStorage.setItem('settings', this.tools.compress(this.settings));
     this.snackBar.open('Setting saved in browser!', 'Done', {
       duration: 2000
     });
