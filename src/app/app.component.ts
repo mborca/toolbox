@@ -24,7 +24,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   marginLeftHeight = 0;
   marginRightWidth = 0;
   marginRightHeight = 0;
-  defaultUnit = 'rem';
+  defaultUnits = 'rem';
   fonts = ['Chromatica Black', 'Chromatica Bold', 'Chromatica Medium', 'Chromatica Regular', 'Chromatica Regular Oblique', 'sans-serif'];
   defaultSettings = {
     layout: {
@@ -160,7 +160,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Layout
     const width = this.getVal(size, this.settings.layout.content.width);
     const mode = width[0];
-    let val = isNumber(width[1]) ? width[1] + this.defaultUnit : width[1];
+    let val = isNumber(width[1]) ? width[1] + this.defaultUnits : width[1];
     if (mode === 'fixed') {
       val = 'calc(50% - ' + val + ' / 2)';
     } else if (mode !== 'flexible') {
@@ -187,7 +187,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   getSizeVal(size: string, el: any) {
     const val = this.getVal(size, el);
-    return isNumber(val) ? val + this.defaultUnit : val;
+    return isNumber(val) ? val + this.defaultUnits : val;
   }
 
   getVal(size: string, el: any) {
@@ -271,6 +271,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.dialog.open(InfoDialogComponent, {
       width: '300px',
       height: '500px',
+      autoFocus: false,
       data: {
         title: 'RESPONSIVE',
         breakpoints: this.settings.layout.responsive.breakpoints
@@ -285,6 +286,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       autoFocus: false,
       data: {
         title,
+        units: this.defaultUnits,
         fonts: this.fonts,
         settings: this.settings.typography[el],
         breakpoints: this.settings.layout.responsive.breakpoints
@@ -292,20 +294,23 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.settings.typography[el] = this.cleanSetting(result);
+        this.settings.typography[el] = this.cleanSetting(result.settings, result.units);
         this.applySettings(this.windowSize);
       }
     });
   }
 
-  cleanSetting(setting: any) {
+  cleanSetting(setting: any, units: string) {
     for (const prop of Object.keys(setting)) {
       for (const breakpoint of Object.keys(setting[prop])) {
         if (setting[prop][breakpoint] == null) {
           delete setting[prop][breakpoint];
         } else {
-          const numVal = Number(setting[prop][breakpoint]);
+          let numVal = Number(setting[prop][breakpoint]);
           if (!isNaN(numVal)) {
+            if (units === 'px') {
+              numVal /= 16;
+            }
             setting[prop][breakpoint] = numVal;
           }
         }

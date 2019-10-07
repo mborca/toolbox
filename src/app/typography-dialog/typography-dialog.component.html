@@ -1,4 +1,16 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
+<div class="units">
+  <ng-container *ngIf="data.units === 'rem'">
+    <span>rem</span>
+    |
+    <a (click)="setUnits('px')">px</a>
+  </ng-container>
+  <ng-container *ngIf="data.units === 'px'">
+    <a (click)="setUnits('rem')">rem</a>
+    |
+    <span>px</span>
+  </ng-container>
+</div>
 <form #settingsForm="ngForm">
   <div class="setting" *ngFor="let breakpoint of data.breakpoints | keyvalue: valueAscOrder">
     <h2>{{breakpoint.key}} ({{breakpoint.value}})</h2>
@@ -27,6 +39,6 @@
   </div>
 </form>
 <div mat-dialog-actions>
-  <button mat-raised-button color="accent" [disabled]="!settingsForm.form.valid" [mat-dialog-close]="data.settings" cdkFocusInitial>Save</button>
+  <button mat-raised-button color="accent" [disabled]="!settingsForm.form.valid" [mat-dialog-close]="data" cdkFocusInitial>Save</button>
   <button mat-stroked-button mat-dialog-close>Cancel</button>
 </div>
