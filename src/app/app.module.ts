@@ -3,17 +3,18 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { MatDialogModule, MatButtonModule, MatSnackBarModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatDialogModule, MatButtonModule, MatSnackBarModule,
+         MatFormFieldModule, MatInputModule, MatSelectModule, MatSelect } from '@angular/material';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { TextDialogComponent } from './text-dialog/text-dialog.component';
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';
+import { TypographyDialogComponent } from './typography-dialog/typography-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConfirmationDialogComponent,
-    TextDialogComponent,
-    InfoDialogComponent
+    InfoDialogComponent,
+    TypographyDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -23,12 +24,13 @@ import { InfoDialogComponent } from './info-dialog/info-dialog.component';
     MatButtonModule,
     MatSnackBarModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule
   ],
   entryComponents: [
     ConfirmationDialogComponent,
-    TextDialogComponent,
-    InfoDialogComponent
+    InfoDialogComponent,
+    TypographyDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

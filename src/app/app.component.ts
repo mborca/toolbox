@@ -2,9 +2,10 @@ import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { TextDialogComponent } from './text-dialog/text-dialog.component';
+import { TypographyDialogComponent } from './typography-dialog/typography-dialog.component';
 import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import { isNumber } from 'util';
+import { ToolsService } from './services/tools.service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   marginRightWidth = 0;
   marginRightHeight = 0;
   defaultUnit = 'rem';
+  fonts = ['Chromatica Black', 'Chromatica Bold', 'Chromatica Medium', 'Chromatica Regular', 'Chromatica Regular Oblique', 'sans-serif'];
   defaultSettings = {
     layout: {
       responsive: {
@@ -46,6 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     },
     typography: {
       h1: {
+        'font-family': { xs: 'Chromatica Black' },
         'margin-top': { xs: 0 },
         'margin-bottom': { xs: 0.3 },
         'padding-top': { xs: 0 },
@@ -55,6 +58,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         'letter-spacing': { xs: 0 },
       },
       h2: {
+        'font-family': { xs: 'Chromatica Black' },
         'margin-top': { xs: 0 },
         'margin-bottom': { xs: 0.3 },
         'padding-top': { xs: 0 },
@@ -64,6 +68,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         'letter-spacing': { xs: 0 },
       },
       h3: {
+        'font-family': { xs: 'Chromatica Black' },
         'margin-top': { xs: 0 },
         'margin-bottom': { xs: 0.3 },
         'padding-top': { xs: 0 },
@@ -73,6 +78,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         'letter-spacing': { xs: 0 },
       },
       h4: {
+        'font-family': { xs: 'Chromatica Bold' },
         'margin-top': { xs: 0 },
         'margin-bottom': { xs: 0.3 },
         'padding-top': { xs: 0 },
@@ -82,6 +88,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         'letter-spacing': { xs: 0 },
       },
       h5: {
+        'font-family': { xs: 'Chromatica Bold' },
         'margin-top': { xs: 0 },
         'margin-bottom': { xs: 0.3 },
         'padding-top': { xs: 0 },
@@ -91,6 +98,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         'letter-spacing': { xs: 0 },
       },
       h6: {
+        'font-family': { xs: 'Chromatica Bold' },
         'margin-top': { xs: 0 },
         'margin-bottom': { xs: 0.3 },
         'padding-top': { xs: 0 },
@@ -100,6 +108,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         'letter-spacing': { xs: 0 },
       },
       p: {
+        'font-family': { xs: 'Chromatica Regular' },
         'margin-top': { xs: 0 },
         'margin-bottom': { xs: 0.3 },
         'padding-top': { xs: 0 },
@@ -110,9 +119,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     }
   };
-  settings = this.defaultSettings;
+  settings = this.tools.deepClone(this.defaultSettings);
 
-  constructor(private renderer: Renderer2, private dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(
+    private renderer: Renderer2,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private tools: ToolsService) {
   }
 
   ngOnInit() {
@@ -121,7 +134,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.settings = window.localStorage.getItem('settings')
       ? JSON.parse(window.localStorage.getItem('settings'))
-      : this.defaultSettings;
+      : this.tools.deepClone(this.defaultSettings);
     this.applySettings(this.getSize());
   }
 
@@ -212,19 +225,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  setTextSettings(title: string, el: string) {
-    const dialogRef = this.dialog.open(TextDialogComponent, {
-      width: '500px',
-      height: '500px',
-      data: {
-        title,
-        settings: this.settings.typography[el]
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-    });
-  }
-
   resetSettings() {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '300px',
@@ -237,7 +237,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
         window.localStorage.removeItem('settings');
-        this.settings = this.defaultSettings;
+        this.settings = this.tools.deepClone(this.defaultSettings);
         this.applySettings(this.getSize());
       }
     });
@@ -262,7 +262,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   saveSettings() {
     window.localStorage.setItem('settings', JSON.stringify(this.settings));
-    this.snackBar.open('Setting saved!', 'Done', {
+    this.snackBar.open('Setting saved in browser!', 'Done', {
       duration: 2000
     });
   }
@@ -272,8 +272,45 @@ export class AppComponent implements OnInit, AfterViewInit {
       width: '300px',
       height: '500px',
       data: {
-        title: 'RESPONSIVE'
+        title: 'RESPONSIVE',
+        breakpoints: this.settings.layout.responsive.breakpoints
       }
     });
+  }
+
+  setTypographySettings(title: string, el: string) {
+    const dialogRef = this.dialog.open(TypographyDialogComponent, {
+      width: '500px',
+      height: '500px',
+      autoFocus: false,
+      data: {
+        title,
+        fonts: this.fonts,
+        settings: this.settings.typography[el],
+        breakpoints: this.settings.layout.responsive.breakpoints
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.settings.typography[el] = this.cleanSetting(result);
+        this.applySettings(this.windowSize);
+      }
+    });
+  }
+
+  cleanSetting(setting: any) {
+    for (const prop of Object.keys(setting)) {
+      for (const breakpoint of Object.keys(setting[prop])) {
+        if (setting[prop][breakpoint] == null) {
+          delete setting[prop][breakpoint];
+        } else {
+          const numVal = Number(setting[prop][breakpoint]);
+          if (!isNaN(numVal)) {
+            setting[prop][breakpoint] = numVal;
+          }
+        }
+      }
+    }
+    return setting;
   }
 }
