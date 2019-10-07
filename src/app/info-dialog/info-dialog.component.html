@@ -1,6 +1,12 @@
 <h1 mat-dialog-title>RESPONSIVE</h1>
 <div mat-dialog-content>
   <h3>This tool helps create definitions for responisve rules such as layout, spacing and typography.</h3>
+  <p>Breakpoints:</p>
+  <ul>
+    <li *ngFor="let breakpoint of data.breakpoints | keyvalue: valueAscOrder">
+      <strong>{{breakpoint.key}}</strong> max width: {{breakpoint.value}}
+    </li>
+  </ul>
   <p>Change settings by clicking on different elements:</p>
   <ul>
     <li><a>Header</a> - change header height and padding</li>

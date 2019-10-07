@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TextDialogComponent } from './text-dialog.component';
+import { TypographyDialogComponent } from './typography-dialog.component';
 
-describe('TextDialogComponent', () => {
-  let component: TextDialogComponent;
-  let fixture: ComponentFixture<TextDialogComponent>;
+describe('TypographyDialogComponent', () => {
+  let component: TypographyDialogComponent;
+  let fixture: ComponentFixture<TypographyDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TextDialogComponent ]
+      declarations: [ TypographyDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TextDialogComponent);
+    fixture = TestBed.createComponent(TypographyDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

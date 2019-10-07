@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<form #settingsForm="ngForm">
+  <div class="setting" *ngFor="let breakpoint of data.breakpoints | keyvalue: valueAscOrder">
+    <h2>{{breakpoint.key}} ({{breakpoint.value}})</h2>
+    <div class="fields">
+      <mat-form-field>
+        <mat-label>font-family</mat-label>
+        <mat-select [(ngModel)]="data.settings['font-family'][breakpoint.key]" name="font-family_{{breakpoint.key}}" #field="ngModel">
+          <mat-option *ngIf="breakpoint.key !== 'xs'"></mat-option>
+          <mat-option *ngFor="let font of data.fonts" [value]="font">{{font}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <ng-container *ngFor="let prop of data.settings | keyvalue">
+        <mat-form-field *ngIf="prop.key !== 'font-family'">
+          <mat-label>{{prop.key}}</mat-label>
+          <input matInput pattern="^\d+(\.\d+)?%?$" [(ngModel)]="data.settings[prop.key][breakpoint.key]" [required]="breakpoint.key === 'xs'" [name]="prop.key+'_'+breakpoint.key" #field="ngModel">
+          <mat-hint align="end">num or %</mat-hint>
+          <mat-error *ngIf="!field.valid">invalid value</mat-error>
+        </mat-form-field>
+      </ng-container>
+      <!-- <mat-form-field>
+        <input matInput placeholder="margin-top" pattern="^\d+(\.\d+)?%?$" [(ngModel)]="data.settings['margin-top'][breakpoint.key]" [required]="breakpoint.key === 'xs'" [name]="'margin-top_'+breakpoint.key" #field="ngModel">
+        <mat-hint>num or %</mat-hint>
+        <mat-error *ngIf="!field.valid">invalid value</mat-error>
+      </mat-form-field> -->
+    </div>
+  </div>
+</form>
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" [disabled]="!settingsForm.form.valid" [mat-dialog-close]="data.settings" cdkFocusInitial>Save</button>
+  <button mat-stroked-button mat-dialog-close>Cancel</button>
+</div>
