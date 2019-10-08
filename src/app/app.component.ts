@@ -1,18 +1,21 @@
-import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { TypographyDialogComponent } from './typography-dialog/typography-dialog.component';
-import { InfoDialogComponent } from './info-dialog/info-dialog.component';
 import { isNumber } from 'util';
 import { ToolsService } from './services/tools.service';
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import { InfoDialogComponent } from './dialogs/info-dialog/info-dialog.component';
+import { HeaderDialogComponent } from './dialogs/header-dialog/header-dialog.component';
+import { TypographyDialogComponent } from './dialogs/typography-dialog/typography-dialog.component';
+import { GridDialogComponent } from './dialogs/grid-dialog/grid-dialog.component';
+import { ContentDialogComponent } from './dialogs/content-dialog/content-dialog.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   windowSize = '';
   windowWidth = 0;
   windowHeight = 0;
@@ -24,7 +27,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   marginLeftHeight = 0;
   marginRightWidth = 0;
   marginRightHeight = 0;
-  defaultUnit = 'rem';
+  defaultUnits = 'rem';
   fonts = ['Chromatica Black', 'Chromatica Bold', 'Chromatica Medium', 'Chromatica Regular', 'Chromatica Regular Oblique', 'sans-serif'];
   defaultSettings = {
     layout: {
@@ -119,7 +122,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     }
   };
-  settings = this.tools.deepClone(this.defaultSettings);
+  settings = this.tools.deepClone(this.defaultSettings); // required for type checking
 
   constructor(
     private renderer: Renderer2,
@@ -129,13 +132,25 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-  }
-
-  ngAfterViewInit() {
-    this.settings = window.localStorage.getItem('settings')
-      ? JSON.parse(window.localStorage.getItem('settings'))
-      : this.tools.deepClone(this.defaultSettings);
-    this.applySettings(this.getSize());
+    if (window.location.search) {
+      let settings = null;
+      settings = this.tools.uncompress(window.location.search.substr(1));
+      if (settings) {
+        window.localStorage.setItem('settings', this.tools.compress(settings));
+      }
+      window.location.href = window.location.origin;
+    } else {
+      this.settings = window.localStorage.getItem('settings')
+        ? this.tools.uncompress(window.localStorage.getItem('settings'))
+        : this.tools.deepClone(this.defaultSettings);
+      // Set Infinity for max breakpoint (stored as null)
+      for (const breakpoint of Object.keys(this.settings.layout.responsive.breakpoints)) {
+        if (this.settings.layout.responsive.breakpoints[breakpoint] == null) {
+          this.settings.layout.responsive.breakpoints[breakpoint] = Infinity;
+        }
+      }
+      this.applySettings(this.getSize());
+    }
   }
 
   applySettings(size: string) {
@@ -160,7 +175,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     // Layout
     const width = this.getVal(size, this.settings.layout.content.width);
     const mode = width[0];
-    let val = isNumber(width[1]) ? width[1] + this.defaultUnit : width[1];
+    let val = isNumber(width[1]) ? width[1] + this.defaultUnits : width[1];
     if (mode === 'fixed') {
       val = 'calc(50% - ' + val + ' / 2)';
     } else if (mode !== 'flexible') {
@@ -176,6 +191,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.applySetting('.grid', 'margin-right', '-' + gap);
     this.applySetting('.grid div', 'width',
       'calc(' + 100 / this.getVal(size, this.settings.layout.grid.columns) + '% - ' + gap + ')');
+    // Persist settings
+    window.localStorage.setItem('settings', this.tools.compress(this.settings));
   }
 
   applySetting(selector: string, prop: string, val: string) {
@@ -187,7 +204,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   getSizeVal(size: string, el: any) {
     const val = this.getVal(size, el);
-    return isNumber(val) ? val + this.defaultUnit : val;
+    return isNumber(val) ? val + this.defaultUnits : val;
   }
 
   getVal(size: string, el: any) {
@@ -236,76 +253,111 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'ok') {
-        window.localStorage.removeItem('settings');
         this.settings = this.tools.deepClone(this.defaultSettings);
         this.applySettings(this.getSize());
       }
     });
   }
 
-  exportSettings() {
+  shareSettings() {
     const el = document.createElement('textarea');
     el.style.position = 'fixed';
     el.style.left = '0';
     el.style.top = '0';
     el.style.opacity = '0';
-    el.value = JSON.stringify(this.settings);
+    el.value = window.location.origin + '?' + this.tools.compress(this.settings);
     document.body.appendChild(el);
     el.focus();
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    this.snackBar.open('Settings copied to clipboard!', 'Done', {
-      duration: 2000
-    });
-  }
-
-  saveSettings() {
-    window.localStorage.setItem('settings', JSON.stringify(this.settings));
-    this.snackBar.open('Setting saved in browser!', 'Done', {
+    this.snackBar.open('A link to this configuration was copied to the clipboard!', 'Done', {
       duration: 2000
     });
   }
 
   info() {
-    this.dialog.open(InfoDialogComponent, {
+    const dialogRef = this.dialog.open(InfoDialogComponent, {
       width: '300px',
       height: '500px',
+      autoFocus: false,
       data: {
         title: 'RESPONSIVE',
         breakpoints: this.settings.layout.responsive.breakpoints
       }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.indexOf('typography.') === 0) {
+          const el = result.split('.')[1];
+          this.setSettings(TypographyDialogComponent, 'typography', el);
+        } else {
+          switch (result) {
+            case 'header':
+              this.setHeaderSettings();
+              break;
+            case 'grid':
+              this.setGridSettings();
+              break;
+            case 'content':
+              this.setContentSettings();
+              break;
+            default:
+              throw new Error('Unsupported action: ' + result);
+          }
+        }
+      }
+    });
   }
 
-  setTypographySettings(title: string, el: string) {
-    const dialogRef = this.dialog.open(TypographyDialogComponent, {
+  setTypographySettings(el: string) {
+    this.setSettings(TypographyDialogComponent, 'typography', el);
+  }
+
+  setHeaderSettings() {
+    this.setSettings(HeaderDialogComponent, 'layout', 'header');
+  }
+
+  setGridSettings() {
+    this.setSettings(GridDialogComponent, 'layout', 'grid');
+  }
+
+  setContentSettings() {
+    this.setSettings(ContentDialogComponent, 'layout', 'content');
+  }
+
+  setSettings(comp: any, group: string, el: string) {
+    const dialogRef = this.dialog.open(comp, {
       width: '500px',
       height: '500px',
       autoFocus: false,
       data: {
-        title,
+        title: el,
+        units: this.defaultUnits,
         fonts: this.fonts,
-        settings: this.settings.typography[el],
+        settings: this.settings[group][el],
         breakpoints: this.settings.layout.responsive.breakpoints
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.settings.typography[el] = this.cleanSetting(result);
+        this.settings[group][el] = this.cleanSetting(result.settings, result.units);
         this.applySettings(this.windowSize);
       }
     });
   }
 
-  cleanSetting(setting: any) {
+  cleanSetting(setting: any, units: string) {
     for (const prop of Object.keys(setting)) {
       for (const breakpoint of Object.keys(setting[prop])) {
         if (setting[prop][breakpoint] == null) {
           delete setting[prop][breakpoint];
         } else {
-          const numVal = Number(setting[prop][breakpoint]);
+          let numVal = Number(setting[prop][breakpoint]);
           if (!isNaN(numVal)) {
+            if (units === 'px') {
+              numVal /= 16;
+            }
             setting[prop][breakpoint] = numVal;
           }
         }

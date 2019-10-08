@@ -1,6 +1,6 @@
 # Responsive
 
-This tool helps create definitions for responisve rules such as layout, spacing and typography. Please use the Chrome browser to run the application.
+This tool helps create definitions for responisve rules such as layout, spacing and typography. The application was tested on Chrome.
 
 ## Default Breakpoints
 

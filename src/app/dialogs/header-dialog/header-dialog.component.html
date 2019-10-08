@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div class="units">
+  <ng-container *ngIf="data.units === 'rem'">
+    <span>rem</span>
+    |
+    <a (click)="tools.setUnits('px', data)">px</a>
+  </ng-container>
+  <ng-container *ngIf="data.units === 'px'">
+    <a (click)="tools.setUnits('rem', data)">rem</a>
+    |
+    <span>px</span>
+  </ng-container>
+</div>
+<form #settingsForm="ngForm">
+  <div class="setting" *ngFor="let breakpoint of data.breakpoints | keyvalue: tools.valueAscOrder">
+    <h2>{{breakpoint.key}} ({{breakpoint.value}})</h2>
+    <div class="fields">
+      <ng-container *ngFor="let prop of data.settings | keyvalue">
+        <mat-form-field *ngIf="prop.key !== 'font-family'">
+          <mat-label>{{prop.key}}</mat-label>
+          <input matInput pattern="^\d+(\.\d+)?%?$" [(ngModel)]="data.settings[prop.key][breakpoint.key]" [required]="breakpoint.key === 'xs'" [name]="prop.key+'_'+breakpoint.key" #field="ngModel">
+          <mat-hint align="end">num or %</mat-hint>
+          <mat-error *ngIf="!field.valid">invalid value</mat-error>
+        </mat-form-field>
+      </ng-container>
+    </div>
+  </div>
+</form>
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" [disabled]="!settingsForm.form.valid" [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+  <button mat-stroked-button mat-dialog-close>Cancel</button>
+</div>
