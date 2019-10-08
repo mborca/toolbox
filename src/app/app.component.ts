@@ -1,9 +1,9 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { TypographyDialogComponent } from './typography-dialog/typography-dialog.component';
-import { InfoDialogComponent } from './info-dialog/info-dialog.component';
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import { TypographyDialogComponent } from './dialogs/typography-dialog/typography-dialog.component';
+import { InfoDialogComponent } from './dialogs/info-dialog/info-dialog.component';
 import { isNumber } from 'util';
 import { ToolsService } from './services/tools.service';
 
@@ -140,6 +140,12 @@ export class AppComponent implements OnInit {
       this.settings = window.localStorage.getItem('settings')
         ? this.tools.uncompress(window.localStorage.getItem('settings'))
         : this.tools.deepClone(this.defaultSettings);
+      // Set Infinity for max breakpoint (stored as null)
+      for (const breakpoint of Object.keys(this.settings.layout.responsive.breakpoints)) {
+        if (this.settings.layout.responsive.breakpoints[breakpoint] == null) {
+          this.settings.layout.responsive.breakpoints[breakpoint] = Infinity;
+        }
+      }
       this.applySettings(this.getSize());
     }
   }
@@ -263,13 +269,6 @@ export class AppComponent implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(el);
     this.snackBar.open('A link to this configuration was copied to the clipboard!', 'Done', {
-      duration: 2000
-    });
-  }
-
-  saveSettings() {
-    window.localStorage.setItem('settings', this.tools.compress(this.settings));
-    this.snackBar.open('Setting saved in browser!', 'Done', {
       duration: 2000
     });
   }

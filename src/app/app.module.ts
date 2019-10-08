@@ -5,9 +5,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatButtonModule, MatSnackBarModule,
          MatFormFieldModule, MatInputModule, MatSelectModule } from '@angular/material';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { InfoDialogComponent } from './info-dialog/info-dialog.component';
-import { TypographyDialogComponent } from './typography-dialog/typography-dialog.component';
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import { InfoDialogComponent } from './dialogs/info-dialog/info-dialog.component';
+import { TypographyDialogComponent } from './dialogs/typography-dialog/typography-dialog.component';
 
 @NgModule({
   declarations: [

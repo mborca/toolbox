@@ -22,9 +22,8 @@ export class ToolsService {
     } else {
       clone = Object.assign({}, obj); // Unlink Object reference.
     }
-    const keys = Object.keys(clone);
-    for (let i = 0; i < keys.length; i++) {
-      clone[keys[i]] = this.deepClone(clone[keys[i]]); // recursively unlink reference to nested objects.
+    for (const key of Object.keys(clone)) {
+      clone[key] = this.deepClone(clone[key]); // recursively unlink reference to nested objects.
     }
     return clone; // return unlinked clone.
   }
@@ -41,7 +40,7 @@ export class ToolsService {
     for (let i = 0, len = uncompressed.length; i < len; i++) {
       const curChar = uncompressed[i];
       const joinedWord = word + curChar;
-      // Do not use dictionary[joinedWord] because javascript objects 
+      // Do not use dictionary[joinedWord] because javascript objects
       // will return values for myObject['toString']
       if (dictionary.hasOwnProperty(joinedWord)) {
         word = joinedWord;

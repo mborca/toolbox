@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ToolsService } from '../services/tools.service';
+import { ToolsService } from '../../services/tools.service';
 
 @Component({
   selector: 'app-typography-dialog',
