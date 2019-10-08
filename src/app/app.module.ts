@@ -8,13 +8,15 @@ import { MatDialogModule, MatButtonModule, MatSnackBarModule,
 import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
 import { InfoDialogComponent } from './dialogs/info-dialog/info-dialog.component';
 import { TypographyDialogComponent } from './dialogs/typography-dialog/typography-dialog.component';
+import { HeaderDialogComponent } from './dialogs/header-dialog/header-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConfirmationDialogComponent,
     InfoDialogComponent,
-    TypographyDialogComponent
+    TypographyDialogComponent,
+    HeaderDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,8 @@ import { TypographyDialogComponent } from './dialogs/typography-dialog/typograph
   entryComponents: [
     ConfirmationDialogComponent,
     InfoDialogComponent,
-    TypographyDialogComponent
+    TypographyDialogComponent,
+    HeaderDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

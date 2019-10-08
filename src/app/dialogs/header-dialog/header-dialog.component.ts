@@ -3,15 +3,16 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToolsService } from '../../services/tools.service';
 
 @Component({
-  selector: 'app-typography-dialog',
-  templateUrl: './typography-dialog.component.html',
-  styleUrls: ['./typography-dialog.component.scss']
+  selector: 'app-header-dialog',
+  templateUrl: './header-dialog.component.html',
+  styleUrls: ['./header-dialog.component.scss']
 })
-export class TypographyDialogComponent implements OnInit {
+export class HeaderDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public tools: ToolsService) { }
 
   ngOnInit() {
   }
+
 }

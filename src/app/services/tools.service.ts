@@ -11,6 +11,27 @@ export class ToolsService {
 
   constructor() { }
 
+  setUnits(units: string, data: any) {
+    data.units = units;
+    for (const prop of Object.keys(data.settings)) {
+      for (const breakpoint of Object.keys(data.settings[prop])) {
+        const val = Number(data.settings[prop][breakpoint]);
+        if (!isNaN(val)) {
+          switch (units) {
+            case 'rem':
+              data.settings[prop][breakpoint] /= 16;
+              break;
+            case 'px':
+              data.settings[prop][breakpoint] *= 16;
+              break;
+            default:
+              throw new Error('Unsupported unit: ' + units);
+          }
+        }
+      }
+    }
+  }
+
   deepClone(obj: any) {
     // return value is input is not an Object or Array.
     if (typeof(obj) !== 'object' || obj === null) {

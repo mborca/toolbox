@@ -6,6 +6,7 @@ import { TypographyDialogComponent } from './dialogs/typography-dialog/typograph
 import { InfoDialogComponent } from './dialogs/info-dialog/info-dialog.component';
 import { isNumber } from 'util';
 import { ToolsService } from './services/tools.service';
+import { HeaderDialogComponent } from './dialogs/header-dialog/header-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -301,6 +302,27 @@ export class AppComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.settings.typography[el] = this.cleanSetting(result.settings, result.units);
+        this.applySettings(this.windowSize);
+      }
+    });
+  }
+
+  setHeaderSettings(title: string) {
+    const dialogRef = this.dialog.open(HeaderDialogComponent, {
+      width: '500px',
+      height: '500px',
+      autoFocus: false,
+      data: {
+        title,
+        units: this.defaultUnits,
+        fonts: this.fonts,
+        settings: this.settings.layout.header,
+        breakpoints: this.settings.layout.responsive.breakpoints
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.settings.layout.header = this.cleanSetting(result.settings, result.units);
         this.applySettings(this.windowSize);
       }
     });

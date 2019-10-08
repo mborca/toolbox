@@ -15,13 +15,6 @@
   <div class="setting" *ngFor="let breakpoint of data.breakpoints | keyvalue: tools.valueAscOrder">
     <h2>{{breakpoint.key}} ({{breakpoint.value}})</h2>
     <div class="fields">
-      <mat-form-field>
-        <mat-label>font-family</mat-label>
-        <mat-select [(ngModel)]="data.settings['font-family'][breakpoint.key]" name="font-family_{{breakpoint.key}}" #field="ngModel">
-          <mat-option *ngIf="breakpoint.key !== 'xs'"></mat-option>
-          <mat-option *ngFor="let font of data.fonts" [value]="font">{{font}}</mat-option>
-        </mat-select>
-      </mat-form-field>
       <ng-container *ngFor="let prop of data.settings | keyvalue">
         <mat-form-field *ngIf="prop.key !== 'font-family'">
           <mat-label>{{prop.key}}</mat-label>
