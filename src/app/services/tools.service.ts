@@ -16,7 +16,7 @@ export class ToolsService {
     for (const prop of Object.keys(data.settings)) {
       for (const breakpoint of Object.keys(data.settings[prop])) {
         const val = Number(data.settings[prop][breakpoint]);
-        if (!isNaN(val)) {
+        if (!isNaN(val) && prop !== 'columns') {
           switch (units) {
             case 'rem':
               data.settings[prop][breakpoint] /= 16;
