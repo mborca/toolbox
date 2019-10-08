@@ -10,9 +10,19 @@
   <p>Change settings by clicking on different elements:</p>
   <ul>
     <li><a [mat-dialog-close]="'header'">Header</a> - change header height and padding</li>
-    <li><a>Layout</a> - change global layout (flexible, fixed)</li>
-    <li>Typography - click on tag names to change typography</li>
-    <li><a>Grid</a> - change grid layout</li>
+    <li><a [mat-dialog-close]="'content'">Content</a> - change global layout (flexible, fixed)</li>
+    <li>
+      Typography - click on tag names to change typography
+      <br>
+      <a [mat-dialog-close]="'typography.h1'">H1</a>&nbsp;&nbsp;
+      <a [mat-dialog-close]="'typography.h2'">H2</a>&nbsp;&nbsp;
+      <a [mat-dialog-close]="'typography.h3'">H3</a>&nbsp;&nbsp;
+      <a [mat-dialog-close]="'typography.h4'">H4</a>&nbsp;&nbsp;
+      <a [mat-dialog-close]="'typography.h5'">H5</a>&nbsp;&nbsp;
+      <a [mat-dialog-close]="'typography.h6'">H6</a>&nbsp;&nbsp;
+      <a [mat-dialog-close]="'typography.p'">P</a>
+    </li>
+    <li><a [mat-dialog-close]="'grid'">Grid</a> - change grid layout</li>
   </ul>
   <p><a mat-dialog-close href="https://github.com/mborca/toolbox-responsive" target="_blank">Source code</a></p>
 </div>

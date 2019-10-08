@@ -1,12 +1,14 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
-import { TypographyDialogComponent } from './dialogs/typography-dialog/typography-dialog.component';
-import { InfoDialogComponent } from './dialogs/info-dialog/info-dialog.component';
 import { isNumber } from 'util';
 import { ToolsService } from './services/tools.service';
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import { InfoDialogComponent } from './dialogs/info-dialog/info-dialog.component';
 import { HeaderDialogComponent } from './dialogs/header-dialog/header-dialog.component';
+import { TypographyDialogComponent } from './dialogs/typography-dialog/typography-dialog.component';
+import { GridDialogComponent } from './dialogs/grid-dialog/grid-dialog.component';
+import { ContentDialogComponent } from './dialogs/content-dialog/content-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -286,54 +288,60 @@ export class AppComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        switch (result) {
-          case 'header':
-            this.setHeaderSettings('Header');
-            break;
-          default:
-            break;
+        if (result.indexOf('typography.') === 0) {
+          const el = result.split('.')[1];
+          this.setSettings(TypographyDialogComponent, 'typography', el);
+        } else {
+          switch (result) {
+            case 'header':
+              this.setHeaderSettings();
+              break;
+            case 'grid':
+              this.setGridSettings();
+              break;
+            case 'content':
+              this.setContentSettings();
+              break;
+            default:
+              throw new Error('Unsupported action: ' + result);
+          }
         }
       }
     });
   }
 
-  setTypographySettings(title: string, el: string) {
-    const dialogRef = this.dialog.open(TypographyDialogComponent, {
-      width: '500px',
-      height: '500px',
-      autoFocus: false,
-      data: {
-        title,
-        units: this.defaultUnits,
-        fonts: this.fonts,
-        settings: this.settings.typography[el],
-        breakpoints: this.settings.layout.responsive.breakpoints
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.settings.typography[el] = this.cleanSetting(result.settings, result.units);
-        this.applySettings(this.windowSize);
-      }
-    });
+  setTypographySettings(el: string) {
+    this.setSettings(TypographyDialogComponent, 'typography', el);
   }
 
-  setHeaderSettings(title: string) {
-    const dialogRef = this.dialog.open(HeaderDialogComponent, {
+  setHeaderSettings() {
+    this.setSettings(HeaderDialogComponent, 'layout', 'header');
+  }
+
+  setGridSettings() {
+    this.setSettings(GridDialogComponent, 'layout', 'grid');
+  }
+
+  setContentSettings() {
+    this.setSettings(ContentDialogComponent, 'layout', 'content');
+  }
+
+  setSettings(comp: any, group: string, el: string) {
+    const dialogRef = this.dialog.open(comp, {
       width: '500px',
       height: '500px',
       autoFocus: false,
       data: {
-        title,
+        title: el,
         units: this.defaultUnits,
         fonts: this.fonts,
-        settings: this.settings.layout.header,
+        settings: this.settings[group][el],
         breakpoints: this.settings.layout.responsive.breakpoints
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.settings.layout.header = this.cleanSetting(result.settings, result.units);
+        this.settings[group][el] = this.cleanSetting(result.settings, result.units);
         this.applySettings(this.windowSize);
       }
     });

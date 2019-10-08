@@ -5,7 +5,7 @@
         <a (click)="info()">RESPONSIVE</a>
       </div>
       <div>
-        <a (click)="setHeaderSettings('Header')">Header</a>
+        <a (click)="setHeaderSettings()">Header</a>
         ({{headerWidth}}, {{headerHeight}})
       </div>
       <div class="size">
@@ -15,23 +15,23 @@
   </div>
   <div class="content">
     <div class="margin left">
-      <a>Margin Left</a>&nbsp;({{marginLeftWidth}}, {{marginLeftHeight}})
+      <a (click)="setContentSettings()">Margin Left</a>&nbsp;({{marginLeftWidth}}, {{marginLeftHeight}})
     </div>
     <div class="main">
       <div class="main-content">
         <div class="center">
-          <a>Content</a>
+          <a (click)="setContentSettings()">Content</a>
           ({{contentWidth}}, {{contentHeight}})
         </div>
-        <h1><a (click)="setTypographySettings('H1 Heading', 'h1')">H1</a> heading</h1>
-        <h2><a (click)="setTypographySettings('H2 Heading', 'h2')">H2</a> heading</h2>
-        <h3><a (click)="setTypographySettings('H3 Heading', 'h3')">H3</a> heading</h3>
-        <h4><a (click)="setTypographySettings('H4 Heading', 'h4')">H4</a> heading</h4>
-        <h5><a (click)="setTypographySettings('H5 Heading', 'h5')">H5</a> heading</h5>
-        <h6><a (click)="setTypographySettings('H6 Heading', 'h6')">H6</a> heading</h6>
-        <p><a (click)="setTypographySettings('Paragraph', 'p')">P</a> paragraph</p>
+        <h1><a (click)="setTypographySettings('h1')">H1</a> heading</h1>
+        <h2><a (click)="setTypographySettings('h2')">H2</a> heading</h2>
+        <h3><a (click)="setTypographySettings('h3')">H3</a> heading</h3>
+        <h4><a (click)="setTypographySettings('h4')">H4</a> heading</h4>
+        <h5><a (click)="setTypographySettings('h5')">H5</a> heading</h5>
+        <h6><a (click)="setTypographySettings('h6')">H6</a> heading</h6>
+        <p><a (click)="setTypographySettings('p')">P</a> paragraph</p>
         <div class="center">
-          <a>Grid</a>
+          <a (click)="setGridSettings()">Grid</a>
         </div>
         <div class="grid">
           <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]">Card {{i}}</div>
@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="margin right">
-      <a>Margin Right</a>&nbsp;({{marginRightWidth}}, {{marginRightHeight}})
+      <a (click)="setContentSettings()">Margin Right</a>&nbsp;({{marginRightWidth}}, {{marginRightHeight}})
     </div>
   </div>
   <div class="footer">

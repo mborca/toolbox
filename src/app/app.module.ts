@@ -9,6 +9,8 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
 import { InfoDialogComponent } from './dialogs/info-dialog/info-dialog.component';
 import { TypographyDialogComponent } from './dialogs/typography-dialog/typography-dialog.component';
 import { HeaderDialogComponent } from './dialogs/header-dialog/header-dialog.component';
+import { GridDialogComponent } from './dialogs/grid-dialog/grid-dialog.component';
+import { ContentDialogComponent } from './dialogs/content-dialog/content-dialog.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { HeaderDialogComponent } from './dialogs/header-dialog/header-dialog.com
     ConfirmationDialogComponent,
     InfoDialogComponent,
     TypographyDialogComponent,
-    HeaderDialogComponent
+    HeaderDialogComponent,
+    GridDialogComponent,
+    ContentDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,9 @@ import { HeaderDialogComponent } from './dialogs/header-dialog/header-dialog.com
     ConfirmationDialogComponent,
     InfoDialogComponent,
     TypographyDialogComponent,
-    HeaderDialogComponent
+    HeaderDialogComponent,
+    GridDialogComponent,
+    ContentDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
