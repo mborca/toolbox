@@ -15,4 +15,9 @@ export class ContentDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  modeChange(breakpoint: string) {
+    if (!this.data.settings.mode[breakpoint]) {
+      delete this.data.settings.width[breakpoint];
+    }
+  }
 }
