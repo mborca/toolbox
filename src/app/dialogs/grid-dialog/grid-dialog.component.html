@@ -24,7 +24,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>gap</mat-label>
-        <input matInput pattern="^\d+(\.\d+)?%?$" [(ngModel)]="data.settings.gap[breakpoint.key]" [required]="breakpoint.key === 'xs'" [name]="gap+'_'+breakpoint.key" #field="ngModel">
+        <input matInput pattern="^\d+(\.\d+)?%?$" [(ngModel)]="data.settings.gap[breakpoint.key]" [required]="breakpoint.key === 'xs'" [name]="'gap_'+breakpoint.key" #field="ngModel">
         <mat-hint align="end">num or %</mat-hint>
         <mat-error *ngIf="!field.valid">invalid value</mat-error>
       </mat-form-field>

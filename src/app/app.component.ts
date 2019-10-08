@@ -36,13 +36,14 @@ export class AppComponent implements OnInit {
       },
       header: {
         height: { xs: 3 },
-        paddingHorizontal: { xs: 1 },
-        paddingVertical: { xs: 0.5 }
+        'padding-horizontal': { xs: 1 },
+        'padding-vertical': { xs: 0.5 }
       },
       content: {
-        width: { xs: [ 'flexible', 1 ] },
-        paddingHorizontal: { xs: 1 },
-        paddingVertical: { xs: 0 }
+        mode: { xs: 'flexible' },
+        width: { xs: 1 },
+        'padding-horizontal': { xs: 1 },
+        'padding-vertical': { xs: 0 }
       },
       grid: {
         columns: { xs: 1, sm: 2, md: 3, lg: 4 },
@@ -164,18 +165,18 @@ export class AppComponent implements OnInit {
     this.applySetting('.header', 'height', this.getSizeVal(size, this.settings.layout.header.height));
     this.applySetting('.content', 'top', this.getSizeVal(size, this.settings.layout.header.height));
     // Spacing
-    this.applySetting('.header', 'padding-top', this.getSizeVal(size, this.settings.layout.header.paddingVertical));
-    this.applySetting('.header', 'padding-bottom', this.getSizeVal(size, this.settings.layout.header.paddingVertical));
-    this.applySetting('.header', 'padding-left', this.getSizeVal(size, this.settings.layout.header.paddingHorizontal));
-    this.applySetting('.header', 'padding-right', this.getSizeVal(size, this.settings.layout.header.paddingHorizontal));
-    this.applySetting('.main', 'padding-top', this.getSizeVal(size, this.settings.layout.content.paddingVertical));
-    this.applySetting('.main', 'padding-bottom', this.getSizeVal(size, this.settings.layout.content.paddingVertical));
-    this.applySetting('.main', 'padding-left', this.getSizeVal(size, this.settings.layout.content.paddingHorizontal));
-    this.applySetting('.main', 'padding-right', this.getSizeVal(size, this.settings.layout.content.paddingHorizontal));
+    this.applySetting('.header', 'padding-top', this.getSizeVal(size, this.settings.layout.header['padding-vertical']));
+    this.applySetting('.header', 'padding-bottom', this.getSizeVal(size, this.settings.layout.header['padding-vertical']));
+    this.applySetting('.header', 'padding-left', this.getSizeVal(size, this.settings.layout.header['padding-horizontal']));
+    this.applySetting('.header', 'padding-right', this.getSizeVal(size, this.settings.layout.header['padding-horizontal']));
+    this.applySetting('.main', 'padding-top', this.getSizeVal(size, this.settings.layout.content['padding-vertical']));
+    this.applySetting('.main', 'padding-bottom', this.getSizeVal(size, this.settings.layout.content['padding-vertical']));
+    this.applySetting('.main', 'padding-left', this.getSizeVal(size, this.settings.layout.content['padding-horizontal']));
+    this.applySetting('.main', 'padding-right', this.getSizeVal(size, this.settings.layout.content['padding-horizontal']));
     // Layout
+    const mode = this.getVal(size, this.settings.layout.content.mode);
     const width = this.getVal(size, this.settings.layout.content.width);
-    const mode = width[0];
-    let val = isNumber(width[1]) ? width[1] + this.defaultUnits : width[1];
+    let val = isNumber(width) ? width + this.defaultUnits : width;
     if (mode === 'fixed') {
       val = 'calc(50% - ' + val + ' / 2)';
     } else if (mode !== 'flexible') {
