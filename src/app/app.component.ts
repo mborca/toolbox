@@ -275,13 +275,24 @@ export class AppComponent implements OnInit {
   }
 
   info() {
-    this.dialog.open(InfoDialogComponent, {
+    const dialogRef = this.dialog.open(InfoDialogComponent, {
       width: '300px',
       height: '500px',
       autoFocus: false,
       data: {
         title: 'RESPONSIVE',
         breakpoints: this.settings.layout.responsive.breakpoints
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        switch (result) {
+          case 'header':
+            this.setHeaderSettings('Header');
+            break;
+          default:
+            break;
+        }
       }
     });
   }

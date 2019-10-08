@@ -5,7 +5,7 @@ import { ToolsService } from '../../services/tools.service';
 @Component({
   selector: 'app-typography-dialog',
   templateUrl: './typography-dialog.component.html',
-  styleUrls: ['./typography-dialog.component.scss']
+  styleUrls: ['../dialog.scss', './typography-dialog.component.scss']
 })
 export class TypographyDialogComponent implements OnInit {
   constructor(
